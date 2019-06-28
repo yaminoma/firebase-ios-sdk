@@ -98,6 +98,7 @@ DocumentMap LevelDbRemoteDocumentCache::GetMatching(FSTQuery* query) {
       ![query isCollectionGroupQuery],
       "CollectionGroup queries should be handled in LocalDocumentsView");
 
+  NSDate *methodStart = [NSDate date];
   DocumentMap results;
 
   // Use the query path as a prefix for testing if a document matches the query.
@@ -131,6 +132,13 @@ DocumentMap LevelDbRemoteDocumentCache::GetMatching(FSTQuery* query) {
           results.insert(maybe_doc.key, static_cast<FSTDocument*>(maybe_doc));
     }
   }
+
+  NSDate *methodEnd = [NSDate date];
+
+
+  NSTimeInterval executionTime = [methodEnd timeIntervalSinceDate:methodStart];
+  totalTime +=executionTime;
+  NSLog(@"executionTime = %f, totalTime = %f", executionTime, totalTime);
 
   return results;
 }

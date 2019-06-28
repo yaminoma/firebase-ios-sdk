@@ -98,7 +98,15 @@ std::unique_ptr<MaybeDocument> LocalSerializer::DecodeMaybeDocument(
 
   switch (proto.which_document_type) {
     case firestore_client_MaybeDocument_document_tag:
-      return rpc_serializer_.DecodeDocument(reader, proto.document);
+      if (rpc_serializer_.DecodeString(proto.document.name).find("matching") != std::string::npos) {
+        return rpc_serializer_.DecodeDocument(reader, proto.document);
+      } else {
+        return absl::make_unique<UnknownDocument>(
+                rpc_serializer_.DecodeKey(reader,
+                        rpc_serializer_.DecodeString(proto.document.name)),
+                std::move(SnapshotVersion::None()));
+      }
+
 
     case firestore_client_MaybeDocument_no_document_tag:
       return DecodeNoDocument(reader, proto.no_document);

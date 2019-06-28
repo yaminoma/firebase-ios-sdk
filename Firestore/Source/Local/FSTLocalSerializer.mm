@@ -124,14 +124,22 @@ using firebase::firestore::model::TargetId;
           withCommittedMutations:(BOOL)committedMutations {
   FSTSerializerBeta *remoteSerializer = self.remoteSerializer;
 
-  ObjectValue data = [remoteSerializer decodedFields:document.fields];
   DocumentKey key = [remoteSerializer decodedDocumentKey:document.name];
-  SnapshotVersion version = [remoteSerializer decodedVersion:document.updateTime];
-  return [FSTDocument documentWithData:std::move(data)
-                                   key:std::move(key)
-                               version:version
-                                 state:committedMutations ? FSTDocumentStateCommittedMutations
-                                                          : FSTDocumentStateSynced];
+  if ([document.name containsString:@"matching"]) {
+    SnapshotVersion version = [remoteSerializer decodedVersion:document.updateTime];
+    ObjectValue data = [remoteSerializer decodedFields:document.fields];
+    return [FSTDocument documentWithData:std::move(data)
+                                     key:std::move(key)
+                                 version:version
+                                   state:committedMutations ? FSTDocumentStateCommittedMutations
+                                           : FSTDocumentStateSynced];
+  } else {
+    return [FSTDocument documentWithData:ObjectValue::Empty()
+                                    key:std::move(key)
+                                version:SnapshotVersion::None()
+                                  state:committedMutations ? FSTDocumentStateCommittedMutations
+                                          : FSTDocumentStateSynced];
+  }
 }
 
 /** Encodes a NoDocument value to the equivalent proto. */

@@ -60,6 +60,7 @@ class LevelDbRemoteDocumentCache : public RemoteDocumentCache {
   // This instance is owned by FSTLevelDB; avoid a retain cycle.
   __weak FSTLevelDB* db_;
   FSTLocalSerializer* serializer_;
+  double totalTime;
 };
 
 }  // namespace local

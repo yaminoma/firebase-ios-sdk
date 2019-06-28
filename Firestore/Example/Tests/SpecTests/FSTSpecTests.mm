@@ -78,7 +78,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 // Whether to run the benchmark spec tests.
 // TODO(mrschmidt): Make this configurable via the tests schema.
-static BOOL kRunBenchmarkTests = NO;
+static BOOL kRunBenchmarkTests = YES;
 
 // Disables all other tests; useful for debugging. Multiple tests can have this tag and they'll all
 // be run (but all others won't).
