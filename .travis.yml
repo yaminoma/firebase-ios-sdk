@@ -433,3 +433,4 @@ jobs:
 branches:
   only:
     - master
+    - pb-update-format
