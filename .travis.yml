@@ -12,6 +12,7 @@ stages:
 jobs:
   include:
     - stage: checks
+      osx_image: xcode10.2 # Use more recent formatters than xcode10.1 osx_image
       # This only needs to be run once, so restrict it to an arbitrary combination
       before_install:
         - brew install clang-format
